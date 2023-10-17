@@ -1,8 +1,8 @@
 # Black Jack Game
 
-![alt text](https://github.com/MarioJunio/blackjack/shot1.png)
+![alt text](https://github.com/MarioJunio/blackjack/blob/main/shot1.png)
 
-![alt text](https://github.com/MarioJunio/blackjack/shot2.png)
+![alt text](https://github.com/MarioJunio/blackjack/blob/main/shot2.png)
 
 ### Objetivo do jogo
 
@@ -31,12 +31,12 @@ flutter run
 
 Para melhorar o entedimento, manuntenabilidade e para seguirmos os príncipios do SOLID eu escolhi utilizar a arquitura clean code que já é consolidada em projetos frontend que podem ser segregados em vários microapps, segue abaixo um esboço dessa arquitetura:
 
-![alt text](https://github.com/MarioJunio/blackjack/clean_arc_flutter.png)
+![alt text](https://github.com/MarioJunio/blackjack/blob/main/clean_arc_flutter.png)
 
 ### Gerenciamento de estado
 O gerenciamento de estado da aplicação está feito com MobX, eu decidi utilizá-lo porque com ele conseguimos segregar a regra de negócio da view e coloca-lá em um controller e sempre que precisarmos fazer alguma atualização de estado na tela podemos fazer isso invidualmente em cada Widget sem precisar reconstruir a árvore de widgets novamente para atualizar somente uma parte específica. O MobX conta com vários recursos como efeitos e também possui uma curva de aprendizado bem rápida. 
 
-![alt text](https://github.com/MarioJunio/blackjack/mobx_example.png)
+![alt text](https://github.com/MarioJunio/blackjack/blob/main/mobx_example.png)
 
 Para gerar os arquivos necessários a partir dos controllers definidos é preciso rodar o comando abaixo:
 ```bat
