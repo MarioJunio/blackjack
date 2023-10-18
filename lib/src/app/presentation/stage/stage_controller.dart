@@ -75,8 +75,6 @@ abstract class _StageControllerBase with Store {
   Future<void> createDeck() async {
     try {
       loading = true;
-      // deck = await _createDeckUsecase(numOfCards: 52);
-
       (await _createDeckUsecase(numOfCards: 52))
           .map((deck) => this.deck = deck)
           .mapLeft((errorMessage) => error = errorMessage.message);
@@ -114,9 +112,6 @@ abstract class _StageControllerBase with Store {
 
       dealer.cards?.add(dealerCard.image);
       user.cards?.add(userCard.image);
-    } catch (exception) {
-      print("Error on attach cards to players");
-      error = "Não foi possível sacar as cartas";
     } finally {
       loading = false;
     }
@@ -131,21 +126,34 @@ abstract class _StageControllerBase with Store {
   _updateScores() async {
     try {
       loading = true;
-      final List<DeckCard> dealerCards = await _getCardsPlayerUsecase(
+      List<DeckCard>? _dealerCards;
+
+      (await _getCardsPlayerUsecase(
         deckId: deck!.deckId,
         playerName: dealer.name,
-      );
+      ))
+          .map(
+            (dealerCards) => _dealerCards = dealerCards,
+          )
+          .mapLeft(
+            (failure) => error = failure.message,
+          );
 
-      final List<DeckCard> userCards = await _getCardsPlayerUsecase(
-        deckId: deck!.deckId,
-        playerName: user.name,
-      );
+      if (_dealerCards != null) {
+        List<DeckCard>? _userCards;
 
-      dealer.score = _recalculatePlayerScore(dealerCards);
-      user.score = _recalculatePlayerScore(userCards);
-    } catch (exception) {
-      print("Error on get cards for players");
-      error = "Não foi possível atualizar os pontos dos jogadores";
+        (await _getCardsPlayerUsecase(
+          deckId: deck!.deckId,
+          playerName: user.name,
+        ))
+            .map((userCards) => _userCards = userCards)
+            .mapLeft((failure) => error = failure.message);
+
+        if (_userCards != null) {
+          dealer.score = _recalculatePlayerScore(_dealerCards!);
+          user.score = _recalculatePlayerScore(_userCards!);
+        }
+      }
     } finally {
       loading = false;
     }
